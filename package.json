@@ -38,6 +38,7 @@
     },
     "dependencies": {
         "babel-plugin-transform-typescript-metadata": "^0.3.1",
+        "chalk": "^4.1.0",
         "inversify": "^5.0.5",
         "md5": "^2.3.0",
         "reflect-metadata": "^0.1.13"
