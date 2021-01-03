@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { Logger } from './Logger';
+import { Logger } from './interfaces/Logger';
 
 @injectable()
 export class LoggerImpl_Console implements Logger {

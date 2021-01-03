@@ -1,6 +1,6 @@
 import { randomInt } from 'crypto';
 import { injectable } from 'inversify';
-import { RandomNumberGenerator } from './RandomNumberGenerator';
+import { RandomNumberGenerator } from './interfaces/RandomNumberGenerator';
 
 @injectable()
 export class RandomNumberGeneratorImpl_Crypto implements RandomNumberGenerator {

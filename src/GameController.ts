@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
-import { assertDefined } from './assertDefined';
+import { assertDefined } from './utils/assertDefined';
 import { DI } from './DI';
 import { Draw } from './Draw';
-import { GameAction } from './GameAction';
-import { GameContext } from './GameContext';
-import { GameView } from './GameView';
+import { GameAction } from './interfaces/GameAction';
+import { GameContext } from './interfaces/GameContext';
+import { GameView } from './interfaces/GameView';
 import { Choices } from './models/Choices';
 import { getGameResult } from './models/Rules';
-import { ScoreStorage } from './ScoreStorage';
+import { ScoreStorage } from './interfaces/ScoreStorage';
 
 @injectable()
 export class GameController<Ctx extends GameContext> {

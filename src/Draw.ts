@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import { DI } from './DI';
 import { Choices } from './models/Choices';
 import { ProvenChoice } from './models/ProvenChoice';
-import { RandomNumberGenerator } from './RandomNumberGenerator';
+import { RandomNumberGenerator } from './interfaces/RandomNumberGenerator';
 import md5 from 'md5';
 
 @injectable()

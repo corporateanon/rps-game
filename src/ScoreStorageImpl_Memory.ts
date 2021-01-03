@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { Score } from './models/Score';
-import { ScoreStorage } from './ScoreStorage';
+import { ScoreStorage } from './interfaces/ScoreStorage';
 
 @injectable()
 export class ScoreStorageImpl_Memory implements ScoreStorage {

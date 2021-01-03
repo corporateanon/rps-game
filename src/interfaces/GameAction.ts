@@ -1,5 +1,5 @@
 import { GameContext } from './GameContext';
-import { Choices } from './models/Choices';
+import { Choices } from '../models/Choices';
 
 export interface GameActionChoice {
     type: 'GameActionChoice';
