@@ -5,8 +5,19 @@ import { ProvenChoice } from './models/ProvenChoice';
 import { RandomNumberGenerator } from './interfaces/RandomNumberGenerator';
 import md5 from 'md5';
 
+/**
+ * ComputerChoiceGenerator generates a signed choice.
+ *
+ * A computer may choose any of Rock, Scissors or Paper.
+ * But in order to verify that the computer's choice was truly blind
+ * and made really before the user's choice, we provide a user with
+ * MD5 hash of computer's choice (along with timestamp and salt).
+ *
+ * After the game has ended, a user can calculate MD5 hash of the
+ * computer's choice and make sure the computers played fair.
+ */
 @injectable()
-export class Draw {
+export class ComputerChoiceGenerator {
     constructor(
         @inject(DI.RandomNumberGenerator)
         private rng: RandomNumberGenerator
