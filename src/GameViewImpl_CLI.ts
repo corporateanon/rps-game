@@ -1,15 +1,22 @@
-import { injectable } from 'inversify';
-import { GameView } from './GameView';
 import chalk from 'chalk';
-import { Choices } from './models/Choices';
 import inquirer from 'inquirer';
-import { GameResult } from './models/Rules';
-import { ProvenChoice } from './models/ProvenChoice';
+import { inject, injectable } from 'inversify';
 import qs from 'querystring';
+import { assertDefined } from './assertDefined';
+import { DI } from './DI';
+import { ActionHandler } from './GameAction';
+import { GameContext } from './GameContext';
+import { GameView } from './GameView';
+import { Logger } from './Logger';
+import { Choices } from './models/Choices';
+import { ProvenChoice } from './models/ProvenChoice';
+import { Score } from './models/Score';
 
 @injectable()
-export class GameViewImpl_CLI implements GameView<null> {
-    private getVerificationMessage(provenChoice: ProvenChoice): string {
+export class GameViewImpl_CLI implements GameView<GameContext> {
+    constructor(@inject(DI.Logger) private logger: Logger) {}
+
+    private formatVerificationMessage(provenChoice: ProvenChoice): string {
         const onlineHashCheckURL = `https://api.hashify.net/hash/md5/hex?${qs.stringify(
             { value: provenChoice.proof }
         )}`;
@@ -17,60 +24,84 @@ export class GameViewImpl_CLI implements GameView<null> {
 You can use an online service: ${onlineHashCheckURL}`;
     }
 
+    private formatScore(score: Score): string {
+        const { computerWinsCount: computer, humanWinsCount: human } = score;
+
+        const leadMessage =
+            computer > human
+                ? 'I am leading'
+                : human > computer
+                    ? 'You are leading'
+                    : 'We have a draw';
+
+        return chalk`Score board:
+    Computer: {bold ${computer}}
+    Human   : {bold ${human}}
+    ${leadMessage}`;
+    }
+
     async showGameResult(
-        _ctx: null,
-        result: GameResult,
-        provenChoice: ProvenChoice
+        ctx: GameContext,
+        dispatchAction: ActionHandler<GameContext>
     ): Promise<void> {
-        console.log(
+        const { gameResult, provenChoice, score } = ctx;
+        assertDefined(provenChoice);
+        assertDefined(gameResult);
+        assertDefined(score);
+
+        this.logger.log(
             chalk`{bold My choice was: ${Choices[provenChoice.choice]}}`
         );
 
-        switch (result.type) {
+        switch (gameResult.type) {
         case 'tie':
             {
-                console.log(
+                this.logger.log(
                     chalk`{bold {blue ----------------------------------------}}`
                 );
-                console.log(
+                this.logger.log(
                     chalk`{bold {blue  The game is tied. Let's play again.}}`
                 );
-                console.log(
+                this.logger.log(
                     chalk`{bold {blue ----------------------------------------}}`
                 );
 
-                console.log(
-                    chalk.dim(this.getVerificationMessage(provenChoice))
+                this.logger.log(
+                    chalk.dim(this.formatVerificationMessage(provenChoice))
                 );
             }
             break;
         case 'iWon':
             {
-                console.log(result.message);
-                console.log(
+                if (gameResult.message) {
+                    this.logger.log(gameResult.message);
+                }
+                this.logger.log(
                     chalk`{bold {red -----------------------------}}`
                 );
-                console.log(
+                this.logger.log(
                     chalk`{bold {red  I won! Try again next time.}}`
                 );
-                console.log(
+                this.logger.log(
                     chalk`{bold {red -----------------------------}}`
                 );
-                console.log(
-                    chalk.dim(this.getVerificationMessage(provenChoice))
+                this.logger.log(
+                    chalk.dim(this.formatVerificationMessage(provenChoice))
                 );
             }
             break;
         case 'theyWon':
             {
-                console.log(result.message);
-                console.log(
+                if (gameResult.message) {
+                    this.logger.log(gameResult.message);
+                }
+                this.logger.log(
                     chalk`{bold {green ----------------------------------------}}`
                 );
-                console.log(
+                this.logger.log(
                     chalk`{bold {green  Congratulations!!! You are the winner!}}`
                 );
-                console.log(
+                this.logger.log(
                     chalk`{bold {green ----------------------------------------}}`
                 );
             }
@@ -78,11 +109,23 @@ You can use an online service: ${onlineHashCheckURL}`;
         default:
             break;
         }
-        console.log('\n');
+        this.logger.log(this.formatScore(score));
+
+        this.logger.log('\n');
+
+        dispatchAction(ctx, { type: 'GameActionStart' });
     }
 
-    async askForChoice(_ctx: null, hash: string): Promise<Choices> {
-        console.log(
+    async askForChoice(
+        ctx: GameContext,
+        dispatchAction: ActionHandler<GameContext>
+    ): Promise<void> {
+        const provenChoice = ctx.provenChoice;
+
+        assertDefined(provenChoice);
+        const { hash } = provenChoice;
+
+        this.logger.log(
             chalk`I made my move. You will be able to verify it later using the following hash:
   {bold ${hash}}`
         );
@@ -107,10 +150,6 @@ You can use an online service: ${onlineHashCheckURL}`;
                 ],
             },
         ]);
-        return choice;
-    }
-
-    async showMessage(_ctx: null, message: string): Promise<void> {
-        console.log(message);
+        dispatchAction(ctx, { type: 'GameActionChoice', payload: { choice } });
     }
 }

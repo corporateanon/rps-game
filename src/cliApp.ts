@@ -9,19 +9,23 @@ import { RandomNumberGenerator } from './RandomNumberGenerator';
 import { RandomNumberGeneratorImpl_Crypto } from './RandomNumberGeneratorImpl_Crypto';
 import { ScoreStorage } from './ScoreStorage';
 import { ScoreStorageImpl_Memory } from './ScoreStorageImpl_Memory';
+import { LoggerImpl_Console } from './LoggerImpl_Console';
+import { Logger } from './Logger';
+import { GameContext } from './GameContext';
 
 const container = new Container();
+container.bind<Logger>(DI.Logger).to(LoggerImpl_Console);
 container
     .bind<RandomNumberGenerator>(DI.RandomNumberGenerator)
     .to(RandomNumberGeneratorImpl_Crypto);
 container.bind<Draw>(Draw).toSelf();
-container.bind<GameController<null>>(GameController).toSelf();
-container.bind<GameView<null>>(DI.GameView).to(GameViewImpl_CLI);
+container.bind<GameController<GameContext>>(GameController).toSelf();
+container.bind<GameView<GameContext>>(DI.GameView).to(GameViewImpl_CLI);
 container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);
 
 async function main() {
-    const ctrl = container.get<GameController<null>>(GameController);
-    ctrl.start(null);
+    const ctrl = container.get<GameController<GameContext>>(GameController);
+    ctrl.start({});
 }
 
 main().catch((e) => {

@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Program",
             "skipFiles": ["<node_internals>/**"],
-            "program": "${workspaceFolder}/lib/index.js",
+            "program": "${workspaceFolder}/lib/cliApp.js",
             "outFiles": ["${workspaceFolder}/**/*.js"],
             "console": "integratedTerminal",
             "preLaunchTask": "npm: build"
