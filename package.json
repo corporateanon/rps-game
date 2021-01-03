@@ -1,6 +1,6 @@
 {
     "name": "@tmp-evaluation-tasks/rps-game",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Rock-Scissors-Paper game for the evaluation task",
     "bin": {
         "rps-game": "./lib/bin/cli.js"
