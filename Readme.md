@@ -4,7 +4,7 @@ It is a CLI application for my evaluation task.
 
 ## Installation
 
-Requirement: Node.js 12+
+Requirement: Node.js 14+
 
 ```
 npm i -g @tmp-evaluation-tasks/rps-game
