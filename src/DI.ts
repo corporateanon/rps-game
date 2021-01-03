@@ -3,4 +3,5 @@ export const DI = {
     GameView             : Symbol.for('GameView'),
     ScoreStorage         : Symbol.for('ScoreStorage'),
     Logger               : Symbol.for('Logger'),
+    ChoiceGenerator      : Symbol.for('ChoiceGenerator'),
 };

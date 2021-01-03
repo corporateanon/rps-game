@@ -12,6 +12,7 @@ import { ScoreStorageImpl_Memory } from './ScoreStorageImpl_Memory';
 import { LoggerImpl_Console } from './LoggerImpl_Console';
 import { Logger } from './interfaces/Logger';
 import { GameContext } from './interfaces/GameContext';
+import { ChoiceGenerator } from './interfaces/ChoiceGenerator';
 
 // 1. First we build the DI-container which holds the chosen implemntations of the application parts
 
@@ -20,7 +21,7 @@ container.bind<Logger>(DI.Logger).to(LoggerImpl_Console);
 container
     .bind<RandomNumberGenerator>(DI.RandomNumberGenerator)
     .to(RandomNumberGeneratorImpl_Crypto);
-container.bind<ComputerChoiceGenerator>(ComputerChoiceGenerator).toSelf();
+container.bind<ChoiceGenerator>(DI.ChoiceGenerator).to(ComputerChoiceGenerator);
 container.bind<GameController<GameContext>>(GameController).toSelf();
 container.bind<GameView<GameContext>>(DI.GameView).to(GameViewImpl_CLI);
 container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);

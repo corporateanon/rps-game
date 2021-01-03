@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
-import { assertDefined } from './utils/assertDefined';
 import { DI } from './DI';
-import { ComputerChoiceGenerator } from './ComputerChoiceGenerator';
+import { ChoiceGenerator } from './interfaces/ChoiceGenerator';
 import { GameAction } from './interfaces/GameAction';
 import { GameContext } from './interfaces/GameContext';
 import { GameView } from './interfaces/GameView';
+import { ScoreStorage } from './interfaces/ScoreStorage';
 import { Choices } from './models/Choices';
 import { getGameResult } from './models/Rules';
-import { ScoreStorage } from './interfaces/ScoreStorage';
+import { assertDefined } from './utils/assertDefined';
 
 /**
  * GameController incapsulates business logic.
@@ -31,7 +31,7 @@ import { ScoreStorage } from './interfaces/ScoreStorage';
 export class GameController<Ctx extends GameContext> {
     constructor(
         @inject(DI.GameView) private view: GameView<Ctx>,
-        @inject(ComputerChoiceGenerator) private draw: ComputerChoiceGenerator,
+        @inject(DI.ChoiceGenerator) private choiceGenerator: ChoiceGenerator,
         @inject(DI.ScoreStorage) private storage: ScoreStorage
     ) {}
 
@@ -79,7 +79,7 @@ export class GameController<Ctx extends GameContext> {
     }
 
     public async start(ctx: Ctx): Promise<void> {
-        const provenChoice = await this.draw.getRandomChoice();
+        const provenChoice = await this.choiceGenerator.getRandomChoice();
         await this.view.askForChoice(
             { ...ctx, provenChoice },
             this.dispatchAction
