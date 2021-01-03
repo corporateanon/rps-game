@@ -20,15 +20,7 @@ container.bind<GameView<null>>(DI.GameView).to(GameViewImpl_CLI);
 container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);
 
 async function main() {
-    // const draw = container.get<Draw>(Draw);
-
-    // for (let i = 0; i < 50; i++) {
-    //     const choice = await draw.getRandomChoice();
-    //     console.log(choice);
-    // }
-
     const ctrl = container.get<GameController<null>>(GameController);
-
     ctrl.start(null);
 }
 
