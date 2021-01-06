@@ -4,4 +4,5 @@ export const DI = {
     ScoreStorage         : Symbol.for('ScoreStorage'),
     Logger               : Symbol.for('Logger'),
     ChoiceGenerator      : Symbol.for('ChoiceGenerator'),
+    ExpressApplication   : Symbol.for('ExpressApplication'),
 };

@@ -2,7 +2,6 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { inject, injectable } from 'inversify';
 import qs from 'querystring';
-import { assertDefined } from './utils/assertDefined';
 import { DI } from './DI';
 import { ActionHandler } from './interfaces/GameAction';
 import { GameContext } from './interfaces/GameContext';
@@ -11,9 +10,12 @@ import { Logger } from './interfaces/Logger';
 import { Choices } from './models/Choices';
 import { ProvenChoice } from './models/ProvenChoice';
 import { Score } from './models/Score';
+import { assertDefined } from './utils/assertDefined';
 
 @injectable()
 export class GameViewImpl_CLI implements GameView<GameContext> {
+    private dispatch?: ActionHandler<GameContext>;
+
     constructor(@inject(DI.Logger) private logger: Logger) {}
 
     private formatVerificationMessage(provenChoice: ProvenChoice): string {
@@ -21,7 +23,7 @@ export class GameViewImpl_CLI implements GameView<GameContext> {
             { value: provenChoice.proof }
         )}`;
         return `To verify my choice, check the MD5 hash of this string (without quotes): "${provenChoice.proof}". It should be equal to the hash i sent you before.
-You can use an online service: ${onlineHashCheckURL}`;
+            You can use an online service: ${onlineHashCheckURL}`;
     }
 
     private formatScore(score: Score): string {
@@ -35,15 +37,16 @@ You can use an online service: ${onlineHashCheckURL}`;
                     : 'We have a draw';
 
         return chalk`Score board:
-    Computer: {bold ${computer}}
-    Human   : {bold ${human}}
+            Computer: {bold ${computer}}
+            Human   : {bold ${human}}
     ${leadMessage}`;
     }
 
-    async showGameResult(
-        ctx: GameContext,
-        dispatchAction: ActionHandler<GameContext>
-    ): Promise<void> {
+    subscribe(handler: ActionHandler<GameContext>): void {
+        this.dispatch = handler;
+    }
+
+    async showGameResult(ctx: GameContext): Promise<void> {
         const { gameResult, provenChoice, score } = ctx;
         assertDefined(provenChoice);
         assertDefined(gameResult);
@@ -113,13 +116,10 @@ You can use an online service: ${onlineHashCheckURL}`;
 
         this.logger.log('\n');
 
-        dispatchAction(ctx, { type: 'GameActionStart' });
+        this.dispatch?.(ctx, { type: 'GameActionStart' });
     }
 
-    async askForChoice(
-        ctx: GameContext,
-        dispatchAction: ActionHandler<GameContext>
-    ): Promise<void> {
+    async askForChoice(ctx: GameContext): Promise<void> {
         const provenChoice = ctx.provenChoice;
 
         assertDefined(provenChoice);
@@ -150,6 +150,6 @@ You can use an online service: ${onlineHashCheckURL}`;
                 ],
             },
         ]);
-        dispatchAction(ctx, { type: 'GameActionChoice', payload: { choice } });
+        this.dispatch?.(ctx, { type: 'GameActionChoice', payload: { choice } });
     }
 }

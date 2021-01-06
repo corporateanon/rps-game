@@ -7,9 +7,19 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "CLI Application",
             "skipFiles": ["<node_internals>/**"],
             "program": "${workspaceFolder}/lib/cliApp.js",
+            "outFiles": ["${workspaceFolder}/**/*.js"],
+            "console": "integratedTerminal",
+            "preLaunchTask": "npm: build"
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "REST Application",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/lib/restApp.js",
             "outFiles": ["${workspaceFolder}/**/*.js"],
             "console": "integratedTerminal",
             "preLaunchTask": "npm: build"

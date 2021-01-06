@@ -33,7 +33,9 @@ export class GameController<Ctx extends GameContext> {
         @inject(DI.GameView) private view: GameView<Ctx>,
         @inject(DI.ChoiceGenerator) private choiceGenerator: ChoiceGenerator,
         @inject(DI.ScoreStorage) private storage: ScoreStorage
-    ) {}
+    ) {
+        this.view.subscribe(this.dispatchAction);
+    }
 
     /**
      * React to user interactions triggered by view
@@ -72,17 +74,16 @@ export class GameController<Ctx extends GameContext> {
         }
         const score = await this.storage.getScore();
 
-        await this.view.showGameResult(
-            { ...ctx, gameResult, score, provenChoice },
-            this.dispatchAction
-        );
+        await this.view.showGameResult({
+            ...ctx,
+            gameResult,
+            score,
+            provenChoice,
+        });
     }
 
     public async start(ctx: Ctx): Promise<void> {
         const provenChoice = await this.choiceGenerator.getRandomChoice();
-        await this.view.askForChoice(
-            { ...ctx, provenChoice },
-            this.dispatchAction
-        );
+        await this.view.askForChoice({ ...ctx, provenChoice });
     }
 }
