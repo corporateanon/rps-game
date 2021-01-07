@@ -6,6 +6,11 @@ import { ActionHandler } from '../interfaces/GameAction';
 import { GameView } from '../interfaces/GameView';
 import { choiceStrToChoice } from '../models/Choices';
 import { GameContextREST } from './GameContextREST';
+import {
+    AskForChoiceResponse,
+    ErrorResponse,
+    ShowGameResultResponse,
+} from './Responses';
 
 type GameSessionData = Pick<
     GameContextREST,
@@ -54,13 +59,15 @@ export class GameViewImpl_REST implements GameView<GameContextREST> {
                 res.status(400).json({
                     error  : 'The game has not started',
                     comment: 'To start a new game: POST /start',
-                });
+                } as ErrorResponse);
                 return;
             }
 
             const choice = choiceStrToChoice(req.params.choice);
             if (choice === null) {
-                res.status(400).json({ error: 'Invalid choice' });
+                res.status(400).json({
+                    error: 'Invalid choice',
+                } as ErrorResponse);
                 return;
             }
 
@@ -82,7 +89,7 @@ export class GameViewImpl_REST implements GameView<GameContextREST> {
             message           : 'Make your choice',
             comment           : 'To make a choice: POST /choice/{scissors|rock|paper}',
             computerChoiceHash: ctx.provenChoice?.hash,
-        });
+        } as AskForChoiceResponse);
     }
 
     async showGameResult(ctx: GameContextREST): Promise<void> {
@@ -111,6 +118,6 @@ export class GameViewImpl_REST implements GameView<GameContextREST> {
             proof     : ctx.provenChoice?.proof,
             proofLink,
             scoreBoard: ctx.score,
-        });
+        } as ShowGameResultResponse);
     }
 }
