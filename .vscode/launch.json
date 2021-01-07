@@ -8,9 +8,13 @@
             "type": "pwa-node",
             "request": "launch",
             "name": "CLI Application",
-            "skipFiles": ["<node_internals>/**"],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
             "program": "${workspaceFolder}/lib/cliApp.js",
-            "outFiles": ["${workspaceFolder}/**/*.js"],
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
             "console": "integratedTerminal",
             "preLaunchTask": "npm: build"
         },
@@ -18,11 +22,26 @@
             "type": "pwa-node",
             "request": "launch",
             "name": "REST Application",
-            "skipFiles": ["<node_internals>/**"],
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
             "program": "${workspaceFolder}/lib/restApp.js",
-            "outFiles": ["${workspaceFolder}/**/*.js"],
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ],
             "console": "integratedTerminal",
             "preLaunchTask": "npm: build"
+        },
+        {
+            "name": "Docker Node.js Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "platform": "node",
+            "node": {
+                "package": "${workspaceFolder}/node_modules/@babel/cli/package.json",
+                "localRoot": "${workspaceFolder}/node_modules/@babel/cli"
+            }
         }
     ]
 }
