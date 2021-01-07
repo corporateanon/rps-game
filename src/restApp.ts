@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Container } from 'inversify';
 import 'reflect-metadata';
 import { ComputerChoiceGenerator } from './ComputerChoiceGenerator';
@@ -31,6 +32,7 @@ container.bind<Application>(DI.ExpressApplication).toConstantValue(express());
 (async function () {
     const app = container.get<Application>(DI.ExpressApplication);
     app.set('json spaces', 2);
+    app.use(express.static(join(__dirname, '../client/dist')));
     app.use(
         session({
             secret           : '9857698459745687',
