@@ -1,7 +1,10 @@
 import axios from 'axios';
 import React, { FC, useCallback, useState } from 'react';
-import { APIClient, Choices, Score, ShowGameResultResponse } from './ApiClient';
+import { APIClient } from './ApiClient';
 import { createUseStyles } from 'react-jss';
+import { Choices } from '../lib/models/Choices';
+import { Score } from '../lib/models/Score';
+import { ShowGameResultResponse } from '../lib/rest/Responses';
 
 const useStyles = createUseStyles({
     button: {

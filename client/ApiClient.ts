@@ -1,28 +1,9 @@
 import { AxiosInstance } from 'axios';
-
-export interface Score {
-    readonly computerWinsCount: number;
-    readonly humanWinsCount: number;
-}
-export enum Choices {
-    Rock = 0,
-    Scissors,
-    Paper,
-    LEN,
-}
-export interface AskForChoiceResponse {
-    message: string;
-    comment: string;
-    computerChoiceHash: string;
-}
-export interface ShowGameResultResponse {
-    result: string;
-    message: string;
-    comment: string;
-    proof: string;
-    proofLink: string;
-    scoreBoard: Score;
-}
+import { Choices } from '../lib/models/Choices';
+import {
+    AskForChoiceResponse,
+    ShowGameResultResponse,
+} from '../lib/rest/Responses';
 
 export class APIClient {
     constructor(private http: AxiosInstance) {}
