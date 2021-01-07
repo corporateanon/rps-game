@@ -10,6 +10,47 @@
 			"group": "build",
 			"label": "npm: build",
 			"detail": "npm run build:types && npm run build:js"
+		},
+		{
+			"type": "docker-build",
+			"label": "docker-build",
+			"platform": "node",
+			"dockerBuild": {
+				"dockerfile": "${workspaceFolder}/node_modules/@babel/cli/Dockerfile",
+				"context": "${workspaceFolder}/node_modules/@babel/cli",
+				"pull": true
+			},
+			"node": {
+				"package": "${workspaceFolder}/node_modules/@babel/cli/package.json"
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: release",
+			"dependsOn": [
+				"docker-build"
+			],
+			"platform": "node",
+			"node": {
+				"package": "${workspaceFolder}/node_modules/@babel/cli/package.json"
+			}
+		},
+		{
+			"type": "docker-run",
+			"label": "docker-run: debug",
+			"dependsOn": [
+				"docker-build"
+			],
+			"dockerRun": {
+				"env": {
+					"DEBUG": "*",
+					"NODE_ENV": "development"
+				}
+			},
+			"node": {
+				"package": "${workspaceFolder}/node_modules/@babel/cli/package.json",
+				"enableDebugging": true
+			}
 		}
 	]
 }
