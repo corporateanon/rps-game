@@ -8,25 +8,8 @@ env:
   IMAGE_NAME: rpsgame
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Set up Go 1.x
-        uses: actions/setup-go@v2
-        with:
-          go-version: ^1.13
-        id: go
-
-      - uses: actions/checkout@v2
-
-      - name: Run tests
-        run: |
-          go test
-
+ 
   push:
-    needs: test
-
     runs-on: ubuntu-latest
 
     steps:
