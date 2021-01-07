@@ -1,6 +1,6 @@
 {
     "name": "@tmp-evaluation-tasks/rps-game",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Rock-Scissors-Paper game for the evaluation task",
     "keywords": [],
     "license": "ISC",
