@@ -10,7 +10,8 @@
         "rps-game-server": "./lib/bin/rest.js"
     },
     "files": [
-        "lib"
+        "lib",
+        "client/dist"
     ],
     "scripts": {
         "build": "npm run build:types && npm run build:js && npm run build:client",
