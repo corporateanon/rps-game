@@ -4,7 +4,7 @@ CLI and REST application for Rock-Scissors-Paper game.
 
 ## Installation
 
-Requirement: Node.js 14+
+**Requirement: Node.js 14+**
 
 ```
 npm i -g @tmp-evaluation-tasks/rps-game
@@ -18,13 +18,13 @@ To run CLI-version, type the following command:
 rps-game
 ```
 
+Follow the hints in the terminal to play the game.
+
 If you have a Redis server, running at localhost, you can enable Redis storage, by adding `REDIS=localhost` environment variable before the command:
 
 ```
 REDIS=localhost rps-game
 ```
-
-Follow the hints in the terminal to play the game.
 
 There is also another implementation, built as a web-server with RESTful API.
 
@@ -39,7 +39,6 @@ If you have a Redis server, running at localhost, you can enable Redis storage, 
 ```
 REDIS=localhost rps-game-server
 ```
-
 
 To test the API, you need 2 commands:
 
@@ -61,9 +60,10 @@ curl -i -b ./cookies.txt -c ./cookies.txt -X POST http://127.0.0.1:3000/choice/p
 
 ```
 
-Also you can test the API using a simple web-interface at http://127.0.0.1:3000 .
+Pay attention, that you need to use cookies (`-b ./cookies.txt -c ./cookies.txt`), because the API uses session.
 
-There is also a server deployed at https://rpsgame.boto.space/
+Also you can test the API using a simple web-interface at http://127.0.0.1:3000 .
+Alternatively, you can play with my instance at https://rpsgame.boto.space/ .
 
 The API **is** statefull, it means that you have to `/start` each time in order to make computer make its choice.
 
@@ -72,6 +72,8 @@ Game session (a state of current game, computer's choice and so on) is stored in
 The scoreboard is stored in a separate storage (memory or Redis, depending on the value of `REDIS` environment variable), which is global and has only one instance.
 
 ## Development
+
+Requirement: Node.js 14+
 
 ### CLI
 
