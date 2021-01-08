@@ -72,14 +72,5 @@ npm start
 
 ```
 npm ci
-```
-
-Then, in one terminal window type the following:
-```
-npm run watch:client
-```
-
-In another:
-```
 npm run dev:rest
 ```

@@ -13,6 +13,8 @@ import { LoggerImpl_Console } from './LoggerImpl_Console';
 import { Logger } from './interfaces/Logger';
 import { GameContext } from './interfaces/GameContext';
 import { ChoiceGenerator } from './interfaces/ChoiceGenerator';
+import IORedis, { Redis } from 'ioredis';
+import { ScoreStorageImpl_Redis } from './ScoreStorageImpl_Redis';
 
 // 1. First we build the DI-container which holds the chosen implemntations of the application parts
 
@@ -24,7 +26,14 @@ container
 container.bind<ChoiceGenerator>(DI.ChoiceGenerator).to(ComputerChoiceGenerator);
 container.bind<GameController<GameContext>>(GameController).toSelf();
 container.bind<GameView<GameContext>>(DI.GameView).to(GameViewImpl_CLI);
-container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);
+if (process.env.REDIS) {
+    container
+        .bind<Redis>(DI.Redis)
+        .toConstantValue(new IORedis(process.env.REDIS));
+    container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Redis);
+} else {
+    container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);
+}
 
 // 2. Then we start the application by dispatching GameActionStart action to the controller
 

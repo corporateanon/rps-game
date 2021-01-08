@@ -5,4 +5,5 @@ export const DI = {
     Logger               : Symbol.for('Logger'),
     ChoiceGenerator      : Symbol.for('ChoiceGenerator'),
     ExpressApplication   : Symbol.for('ExpressApplication'),
+    Redis                : Symbol.for('Redis'),
 };

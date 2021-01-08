@@ -1,5 +1,6 @@
 import { Application } from 'express';
 import { Container } from 'inversify';
+import IORedis, { Redis } from 'ioredis';
 import 'reflect-metadata';
 import { ComputerChoiceGenerator } from './ComputerChoiceGenerator';
 import { DI } from './DI';
@@ -16,6 +17,7 @@ import { createExpressAcpplication } from './rest/createExpressApplication';
 import { GameContextREST } from './rest/GameContextREST';
 import { GameViewImpl_REST } from './rest/GameViewImpl_REST';
 import { ScoreStorageImpl_Memory } from './ScoreStorageImpl_Memory';
+import { ScoreStorageImpl_Redis } from './ScoreStorageImpl_Redis';
 
 const container = new Container();
 container.bind<Logger>(DI.Logger).to(LoggerImpl_Console);
@@ -25,7 +27,16 @@ container
 container.bind<ChoiceGenerator>(DI.ChoiceGenerator).to(ComputerChoiceGenerator);
 container.bind<GameController<GameContext>>(GameController).toSelf();
 container.bind<GameView<GameContextREST>>(DI.GameView).to(GameViewImpl_REST);
-container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);
+
+if (process.env.REDIS) {
+    container
+        .bind<Redis>(DI.Redis)
+        .toConstantValue(new IORedis(process.env.REDIS));
+    container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Redis);
+} else {
+    container.bind<ScoreStorage>(DI.ScoreStorage).to(ScoreStorageImpl_Memory);
+}
+
 container
     .bind<Application>(DI.ExpressApplication)
     .toConstantValue(createExpressAcpplication());
