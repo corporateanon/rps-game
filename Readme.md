@@ -2,6 +2,10 @@
 
 CLI and REST application for Rock-Scissors-Paper game.
 
+## Project structure
+
+See: [Map.md](/Map.md)
+
 ## Installation
 
 **Requirement: Node.js 14+**
