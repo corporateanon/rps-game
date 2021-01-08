@@ -63,7 +63,7 @@ curl -i -b ./cookies.txt -c ./cookies.txt -X POST http://127.0.0.1:3000/choice/p
 
 Also you can test the API using a simple web-interface at http://127.0.0.1:3000 .
 
-The API **is** stetefull, it means that you have to `/start` each time in order to make computer make its choice.
+The API **is** statefull, it means that you have to `/start` each time in order to make computer make its choice.
 
 Game session (a state of current game, computer's choice and so on) is stored in Express session (that's why, if you need to test the API, you have to use a client supporting cookies).
 
